@@ -22,8 +22,8 @@
     "express-ws": "^5.0.2",
     "houndify": "^3.1.13",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.3.0",
-    "mongoose": "^8.0.1",
+    "mongodb": "^5.8.1",
+    "mongoose": "^7.3.0",
     "nodemailer": "^6.9.7",
     "validator": "^13.11.0"
   },
