@@ -17,6 +17,7 @@ const config = {
     host: 'smtp.gmail.com',
     port: 587,
     secure: true,
+    rejectUnauthorized: false,
     auth: {
         user: 'siddharthaghimire@gmail.com',
         pass: 'nrfbehjqyrskcqcm'
