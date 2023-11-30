@@ -3,7 +3,7 @@ dotenv.config()
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt'
 const router = express.Router()
-import User from '../models/auth/auth'
+import User from '../models/auth/auth.js'
 import ResetPassword from '../models/resetPassword/ResetPassword'
 import { validateCreateAccount, validateLogin } from '../middleware/auth';
 import jwt from 'jsonwebtoken';
