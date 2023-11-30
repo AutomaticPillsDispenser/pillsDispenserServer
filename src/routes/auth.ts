@@ -61,6 +61,7 @@ router.post('/createAccount', validateCreateAccount, async (req: Request, res: R
             subject: 'Email Verification',
             html: `<p>Click the following link to verify your email: <a href="${URL}/auth/verify/${savedUser._id}">Verify Email</a></p>`
         };
+        console.log(mailOptions)
         send(mailOptions)
         res.json(userResponse);
 
