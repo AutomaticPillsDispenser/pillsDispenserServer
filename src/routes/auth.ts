@@ -4,8 +4,8 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt'
 const router = express.Router()
 import User from '../models/auth/auth.js'
-import ResetPassword from '../models/resetPassword/ResetPassword'
-import { validateCreateAccount, validateLogin } from '../middleware/auth';
+import ResetPassword from '../models/resetPassword/ResetPassword.js'
+import { validateCreateAccount, validateLogin } from '../middleware/auth.js';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer'
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || ""
