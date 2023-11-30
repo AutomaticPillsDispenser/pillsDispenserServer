@@ -1,13 +1,13 @@
 import validator from 'validator'
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt'
+import { Document } from 'mongoose';
 import User from '../models/auth/auth';
 
 
 interface AuthenticatedRequest extends Request {
-    user?: User; // Add the user property to Request
+    user?: Document & { email: string; password: string; appleId: string; username: string; verified: boolean; date: string; };
 }
-
 
 //Validator Middleware
 export const validateCreateAccount = async (req: Request, res: Response, next: Function) => {
@@ -34,7 +34,7 @@ export const validateCreateAccount = async (req: Request, res: Response, next: F
     next();
 };
 
-export const validateLogin = async (req: AuthenticatedRequest, res: Response, next: Function) => {
+export const validateLogin = async (req: any, res: Response, next: Function) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username, verified: true });

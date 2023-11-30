@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || ""
 
-export function authenticateToken(req: Request, res: Response, next: Function) {
+export function authenticateToken(req: any, res: Response, next: Function) {
     const token = req.header('Authorization');
     if (!token) return res.status(401).json({ message: 'Access denied' });
 

@@ -21,7 +21,7 @@ const config = {
         pass: 'nrfbehjqyrskcqcm'
     }
 }
-function send(data) {
+function send(data: any) {
     const transporter = nodemailer.createTransport(config);
     transporter.sendMail(data, (err, info) => {
         if (err) {
@@ -31,7 +31,7 @@ function send(data) {
 }
 
 interface AuthenticatedRequest extends Request {
-    user?: User; // Add the user property to Request
+    user?: typeof User; // Add the user property to Request
 }
 
 router.post('/createAccount', validateCreateAccount, async (req: Request, res: Response) => {
@@ -66,7 +66,7 @@ router.post('/createAccount', validateCreateAccount, async (req: Request, res: R
 
 router.post('/login', validateLogin, async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const user = req.user;
+        const user: any = req.user;
         const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, { expiresIn: '7d' });
         res.json({ token, email: user.email, username: user.username, id: user._id });
     } catch (error) {
@@ -109,8 +109,15 @@ router.post('/loginWithGoogle', async (req: AuthenticatedRequest, res: Response)
 router.post('/loginWithApple', async (req: Request, res: Response) => {
     try {
         const { username, userId, identityToken } = req.body;
-        const jwtToken = jwt.decode(identityToken)
-        const email = jwtToken.email
+        const jwtToken = jwt.decode(identityToken) as { email?: string } | null; // Type assertion
+
+        let email = '';
+
+        if (jwtToken != null && typeof jwtToken == 'object') {
+            if (jwtToken.email) {
+                email = jwtToken.email;
+            }
+        }
         let user = await User.findOne({ email });
         let token = ''
         if (!user) {
@@ -196,7 +203,7 @@ router.post('/changePassword', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
-async function generateAndUpdateOTP(email) {
+async function generateAndUpdateOTP(email: string) {
     try {
         // Find the user by email in the User schema
         const user = await User.findOne({ email });
