@@ -19,7 +19,3 @@ app.get("/", (req, res) => {
     res.json({ message: 'Sid' })
 })
 
-app.use('/auth', authRouter)
-app.use('/feedback', feedbackRouter)
-app.use('/travelRecord', travelRecord)
-app.use('/report', reportRecord)
