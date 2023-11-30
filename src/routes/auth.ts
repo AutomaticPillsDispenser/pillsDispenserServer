@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer'
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || ""
 const SECRET_LOGIN_KEY = process.env.SECRET_LOGIN_KEY || ""
+const URL=process.env.SERVER_URL || ""
 
 const config = {
     service: 'gmail',
@@ -56,7 +57,7 @@ router.post('/createAccount', validateCreateAccount, async (req: Request, res: R
             from: 'siddharthaghimire@gmail.com',
             to: email,
             subject: 'Email Verification',
-            html: `<p>Click the following link to verify your email: <a href="http://localhost:3000/auth/verify/${savedUser._id}">Verify Email</a></p>`
+            html: `<p>Click the following link to verify your email: <a href="${URL}/auth/verify/${savedUser._id}">Verify Email</a></p>`
         };
         send(mailOptions)
         res.json(userResponse);
