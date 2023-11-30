@@ -17,7 +17,6 @@ const config = {
     host: 'smtp.gmail.com',
     port: 587,
     secure: true,
-    rejectUnauthorized: false,
     auth: {
         user: 'siddharthaghimire@gmail.com',
         pass: 'nrfbehjqyrskcqcm'
@@ -42,6 +41,8 @@ router.get("/",async (req: Request, res: Response)=>{
 router.post('/createAccount', validateCreateAccount, async (req: Request, res: Response) => {
     try {
         const { email, password, username } = req.body;
+        console.log("Credentials: ",email, password, username)
+
         const hashedPassword = await bcrypt.hash(password, 10); // 10 is the number of salt rounds
         const newUser = new User({
             email, password: hashedPassword, username, verified: false,

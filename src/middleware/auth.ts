@@ -12,7 +12,6 @@ interface AuthenticatedRequest extends Request {
 //Validator Middleware
 export const validateCreateAccount = async (req: Request, res: Response, next: Function) => {
     const { email, password, username } = req.body;
-    console.log(email, password, username)
     if (!validator.isEmail(email)) {
         return res.status(400).json({ error: 'Invalid email address' });
     }
