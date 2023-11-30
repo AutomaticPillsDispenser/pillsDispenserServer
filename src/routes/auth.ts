@@ -33,6 +33,9 @@ function send(data: any) {
 interface AuthenticatedRequest extends Request {
     user?: typeof User; // Add the user property to Request
 }
+router.get("/",async (req: Request, res: Response)=>{
+    res.json({message:'Hit'})
+} )
 
 router.post('/createAccount', validateCreateAccount, async (req: Request, res: Response) => {
     try {
