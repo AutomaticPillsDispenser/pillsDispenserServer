@@ -8,16 +8,20 @@
     ],
     "routes": [
       {
+        "src": "/middleware/(.*)",
+        "dest": "src/middleware/$1"
+      },
+      {
         "src": "/routes/(.*)",
         "dest": "src/routes/$1"
       },
       {
-        "src": "/(.*)",
-        "dest": "src/index.ts"
+        "src": "/config/(.*)",
+        "dest": "src/config/$1"
       },
       {
-        "src": "./src/(.*)",
-        "dest": "index.ts"
+        "src": "/(.*)",
+        "dest": "src/index.ts"
       }
     ]
   }
