@@ -19,3 +19,4 @@ app.get("/", (req, res) => {
     res.json({ message: 'Sid' })
 })
 
+app.use('/auth', authRouter)
