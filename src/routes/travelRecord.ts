@@ -2,8 +2,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express, { Request, Response } from 'express';
 const router = express.Router()
-import { authenticateToken } from '../middleware/feedback';
-import TravelRecord from '../models/travelRecord/travelRecord'
+import { authenticateToken } from '../middleware/feedback.js';
+import TravelRecord from '../models/travelRecord/travelRecord.js'
 
 TravelRecord.schema.index({ userId: 1, selectedLocation: 1 }, { unique: true });
 

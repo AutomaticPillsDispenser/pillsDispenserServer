@@ -2,8 +2,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 import express, { Request, Response } from 'express';
 const router = express.Router()
-import { authenticateToken } from '../middleware/feedback';
-import ReportRecord from '../models/report/report';
+import { authenticateToken } from '../middleware/feedback.js';
+import ReportRecord from '../models/report/report.js';
 
 
 router.post('/sendReport', authenticateToken, async (req: Request, res: Response) => {
