@@ -1,11 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv'
 dotenv.config()
-import feedbackRouter from './routes/feedback.ts'
-import travelRecord from './routes/travelRecord.ts'
-import reportRecord from './routes/report.ts'
-import authRouter from './routes/auth.ts'
-import connectDatabase from './config/databaseConnection.ts'
+import feedbackRouter from './src/routes/feedback.js'
+import travelRecord from './src/routes/travelRecord.js'
+import reportRecord from './src/routes/report.js'
+import authRouter from './src/routes/auth.js'
+import connectDatabase from './src/config/databaseConnection.js'
 const app = express();
 const port = process.env.PORT;
 
