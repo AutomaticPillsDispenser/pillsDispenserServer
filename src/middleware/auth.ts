@@ -2,7 +2,7 @@ import validator from 'validator'
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt'
 import { Document } from 'mongoose';
-import User from '../models/auth/auth';
+import User from '../models/auth/auth.js';
 
 
 interface AuthenticatedRequest extends Request {
