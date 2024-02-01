@@ -6,7 +6,7 @@ import { authenticateToken } from '../middleware/feedback';
 const router = express.Router();
 dotenv.config();
 
-router.post('/',authenticateToken, async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     try {
         const { message } = req.body;
         console.log(message);
@@ -36,7 +36,7 @@ const getAIResponse = async (message: any) => {
             model: 'pplx-7b-online',
             messages: [
                 { role: 'system', content: 'answer accurately in 20 words' },
-                { role: 'user', content: message+" my location is lubhu kathmandu" },
+                { role: 'user', content: message },
             ],
             max_tokens: 60
         });
