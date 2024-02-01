@@ -38,8 +38,9 @@ const getAIResponse = async (message: any) => {
                 { role: 'system', content: 'answer accurately in 20 words' },
                 { role: 'user', content: message },
             ],
-            max_tokens: 60
-        });
+            max_tokens: 80
+
+                });
 
         return response.data;
     } catch (error) {
