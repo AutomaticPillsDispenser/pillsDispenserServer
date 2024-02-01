@@ -35,7 +35,7 @@ router.post('/getUserRecord', authenticateToken, async (req: Request, res: Respo
         }
         const records = await TravelRecord.find({ userId })
             .sort({ date: -1 })
-            .limit(4);
+            .limit(10);
         if (records.length === 0) {
             return res.status(404).json({ message: 'No records found for the specified user' });
         }
