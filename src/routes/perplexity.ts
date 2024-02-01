@@ -6,7 +6,7 @@ import { authenticateToken } from '../middleware/feedback';
 const router = express.Router();
 dotenv.config();
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/',authenticateToken, async (req: Request, res: Response) => {
     try {
         const { message } = req.body;
         console.log(message);
