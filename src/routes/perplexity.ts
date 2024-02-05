@@ -40,9 +40,9 @@ const getAIResponse = async (message: any) => {
       model: "pplx-7b-online",
       messages: [
         {
-          role: "system",
+          role: "assistant",
           content:
-            "",
+            "be very short and precise",
         },
         { role: "user", content: message },
       ],
