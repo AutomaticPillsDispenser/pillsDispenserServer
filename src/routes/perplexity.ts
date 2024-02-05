@@ -42,7 +42,7 @@ const getAIResponse = async (message: any) => {
         {
           role: "system",
           content:
-            "be short and precise",
+            "You are and AI assistant",
         },
         { role: "user", content: message },
       ],
