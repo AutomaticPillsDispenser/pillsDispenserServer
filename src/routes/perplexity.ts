@@ -42,7 +42,7 @@ const getAIResponse = async (message: any) => {
         {
           role: "system",
           content:
-            "you should make the answers very very short and accurate and within 20 words in a must",
+            "be short and precise",
         },
         { role: "user", content: message },
       ],
