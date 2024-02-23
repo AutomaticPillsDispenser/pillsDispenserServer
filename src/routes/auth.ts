@@ -40,7 +40,6 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post(
   "/createAccount",
-  validateCreateAccount,
   async (req: Request, res: Response) => {
     try {
       const { email, password, username } = req.body;
