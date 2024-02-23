@@ -18,8 +18,8 @@ const config = {
   port: 587,
   secure: true,
   auth: {
-    user: "siddharthaghimire@gmail.com",
-    pass: "nrfbehjqyrskcqcm",
+    user: "maps.native3@gmail.com",
+    pass: "mpawyscspjnrfnjn ",
   },
 };
 function send(data: any) {
@@ -61,7 +61,7 @@ router.post(
         username: savedUser.username,
       };
       const mailOptions = {
-        from: "siddharthaghimire@gmail.com",
+        from: "maps.native3@gmail.com",
         to: email,
         subject: "Email Verification",
         html: `<p>Click the following link to verify your email: <a href="${URL}/auth/verify/${savedUser._id}">Verify Email</a></p>`,
@@ -232,7 +232,7 @@ router.post("/resetPassword", async (req, res) => {
 
     // Compose the email data
     const emailData = {
-      from: "siddharthaghimire@gmail.com",
+      from: "maps.native3@gmail.com",
       to: email, // Use the email from the database
       subject: "Password Reset OTP",
       text: `Your OTP for password reset is: ${newOTP}`,
