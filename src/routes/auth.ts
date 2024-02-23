@@ -12,7 +12,7 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY || "";
 const SECRET_LOGIN_KEY = process.env.SECRET_LOGIN_KEY || "";
 const URL = process.env.SERVER_URL || "";
 
-const config = {
+export const config = {
   service: "gmail",
   host: "smtp.gmail.com",
   port: 587,
@@ -22,7 +22,7 @@ const config = {
     pass: "mpawyscspjnrfnjn ",
   },
 };
-function send(data: any) {
+export function send(data: any) {
   const transporter = nodemailer.createTransport(config);
   transporter.sendMail(data, (err, info) => {
     if (err) {
@@ -40,10 +40,10 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post(
   "/createAccount",
+  validateCreateAccount,
   async (req: Request, res: Response) => {
     try {
       const { email, password, username } = req.body;
-      console.log("Credentials: ", email, password, username);
 
       const hashedPassword = await bcrypt.hash(password, 10); // 10 is the number of salt rounds
       const newUser = new User({
@@ -59,7 +59,7 @@ router.post(
         email: savedUser.email,
         username: savedUser.username,
       };
-      
+
       const mailOptions = {
         from: "maps.native3@gmail.com",
         to: email,
@@ -240,7 +240,6 @@ router.post(
       try {
         await addToStrapi(email, username);
       } catch (e) {}
-      console.log(mailOptions);
       send(mailOptions);
       res.json(userResponse);
     } catch (error) {
@@ -272,7 +271,8 @@ router.post(
   }
 );
 async function addToStrapi(email: any, username: any) {
-  const apiUrl = "https://strapi-production-110d.up.railway.app" + "/api/waitlists";
+  const apiUrl =
+    "https://strapi-production-110d.up.railway.app" + "/api/waitlists";
   const token =
     "58c5c53a4dc72b4937a4041846f6547a69956f088f6f67399e7d5a21a357c18d88c7902a56f2061700b8956b51f044850cc02e9698ca36a2c571268d4072fbe8415356354be0b971d462446e1acd4f19b6ddf67d6681f8cca09478693ba91c0633f40456953f4eacf07ac9f6a7605aab3b0365442d77b81ceff4e8507434a4ce"; // Replace with your actual Bearer token
   const created = new Date().toDateString();
@@ -290,7 +290,6 @@ router.post(
   async (req: AuthenticatedRequest, res: Response) => {
     try {
       const { username, email } = req.body;
-      console.log(username, email);
       // Check if the user with the provided email already exists
       let user = await User.findOne({ email });
 
@@ -363,8 +362,8 @@ router.post("/loginWithApple", async (req: Request, res: Response) => {
     }
     // Generate JWT token
     try {
-        await addToStrapi(email, username);
-      } catch (e) {}
+      await addToStrapi(email, username);
+    } catch (e) {}
     // Respond with token and user details
     res.json({
       token,
@@ -406,7 +405,159 @@ router.post("/resetPassword", async (req, res) => {
       from: "maps.native3@gmail.com",
       to: email, // Use the email from the database
       subject: "Password Reset OTP",
-      text: `Your OTP for password reset is: ${newOTP}`,
+      html: `<!DOCTYPE html>
+      <html>
+      
+      <head>
+      
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Password Reset OTP</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style type="text/css">
+          @media screen {
+            @font-face {
+              font-family: 'Source Sans Pro';
+              font-style: normal;
+              font-weight: 400;
+              src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
+            }
+      
+            @font-face {
+              font-family: 'Source Sans Pro';
+              font-style: normal;
+              font-weight: 700;
+              src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
+            }
+          }
+      
+          body,
+          table,
+          td,
+          a {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+          }
+      
+          table,
+          td {
+            mso-table-rspace: 0pt;
+            mso-table-lspace: 0pt;
+          }
+      
+          img {
+            -ms-interpolation-mode: bicubic;
+          }
+      
+          a[x-apple-data-detectors] {
+            font-family: inherit !important;
+            font-size: inherit !important;
+            font-weight: inherit !important;
+            line-height: inherit !important;
+            color: inherit !important;
+            text-decoration: none !important;
+          }
+      
+          div[style*="margin: 16px 0;"] {
+            margin: 0 !important;
+          }
+      
+          body {
+            width: 100% !important;
+            height: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+      
+          table {
+            border-collapse: collapse !important;
+          }
+      
+          a {
+            color: #1a82e2;
+          }
+      
+          img {
+            height: auto;
+            line-height: 100%;
+            text-decoration: none;
+            border: 0;
+            outline: none;
+          }
+        </style>
+      
+      </head>
+      
+      <body style="background-color: #e9ecef;">
+      
+        <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
+          Password Reset OTP for Native Maps
+        </div>
+      
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      
+          <tr>
+            <td align="center" bgcolor="#e9ecef">
+      
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                <tr>
+                  <td align="center" valign="top" style="padding: 36px 24px;">
+                    <a href="https://www.mapsnative.com" target="_blank" style="display: inline-block;">
+                      <img src="https://raw.githubusercontent.com/NativeMap/svgImages/main/assets/images/roundedProfile.png" alt="Logo" border="0" width="80" style="display: block; width: 80px; max-width: 80px; min-width: 80px;">
+                    </a>
+                  </td>
+                </tr>
+              </table>
+      
+            </td>
+          </tr>
+          <tr>
+            <td align="center" bgcolor="#e9ecef">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                <tr>
+                  <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
+                    <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Password Reset OTP</h1>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" bgcolor="#e9ecef">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+      
+                <tr>
+                  <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
+                    <p style="margin: 0;">Your OTP for password reset is: <strong>${newOTP}</strong></p>
+                  </td>
+                </tr>
+      
+                <tr>
+                  <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
+                    <p style="margin: 0;">If you did not request this password reset or need further assistance, please ignore this email.</p>
+                  </td>
+                </tr>
+              </table>
+      
+            </td>
+          </tr>
+      
+          <tr>
+            <td align="center" bgcolor="#e9ecef" style="padding: 24px;">
+      
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+      
+      
+              </table>
+            </td>
+          </tr>
+      
+        </table>
+      
+      </body>
+      
+      </html>
+      `,
     };
 
     // Send the email
