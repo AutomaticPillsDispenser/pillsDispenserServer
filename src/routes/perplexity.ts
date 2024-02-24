@@ -37,12 +37,12 @@ const getAIResponse = async (message: any) => {
 
     // AI API request
     const response = await sdk.post_chat_completions({
-      model: "sonar-small-online",
+      model: "pplx-7b-online",
       messages: [
         {
           role: "assistant",
           content:
-            "You are an AI assistant and answer to the point. Don't make long answers. Be gentle and respond nicely",
+          "You are an AI assistant and answer to the point. Don't make long answers. Be gentle and respond nicely",
         },
         { role: "user", content: message },
       ],
