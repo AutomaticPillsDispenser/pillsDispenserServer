@@ -12,11 +12,18 @@ dotenv.config();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const { message } = req.body;
-    console.log(message);
-
+    const { message, coords } = req.body;
+    console.log(coords);
+    let extraMessage =
+      ". Incase you need my location for any kind of service it is ";
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${coords[0]},${coords[1]}.json?access_token=pk.eyJ1IjoibmF0aXZlbWFwczMiLCJhIjoiY2xvNjRrd2ZyMGY4ZzJubzZrOXh1cGQ5MyJ9.fuZAyptTwY8Yy5cE5J8Ldw`;
+    try {
+      let response = await fetch(url);
+      let json = await response.json();
+      extraMessage += json.features[0].place_name;
+    } catch (e) {}
     // Your AI API request
-    const aiApiResponse = await getAIResponse(message);
+    const aiApiResponse = await getAIResponse(message, extraMessage);
 
     const result = aiApiResponse.choices[0].message.content;
     res.status(200).json({ response: result });
@@ -26,8 +33,7 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-
-const getAIResponse = async (message: any) => {
+const getAIResponse = async (message: any, extraMessage: string) => {
   try {
     const sdk = sdkModule("@pplx/v0#cgfwhhzlrzivxql");
     const token = process.env.BEARER_TOKEN; // Get the bearer token from process environment
@@ -40,9 +46,8 @@ const getAIResponse = async (message: any) => {
       model: "pplx-7b-online",
       messages: [
         {
-          role: "assistant",
-          content:
-            "be very short and precise",
+          role: "system",
+          content: `You are an assistant gives the shortest answer as possible. No extra feedbacks.${extraMessage}`,
         },
         { role: "user", content: message },
       ],
