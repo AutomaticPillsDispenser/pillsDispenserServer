@@ -21,7 +21,6 @@ router.post("/", async (req: Request, res: Response) => {
       extraMessage += json.features[0].place_name;
     } catch (e) {}
     // Your AI API request
-    console.log(extraMessage)
     const aiApiResponse = await getAIResponse(message, extraMessage);
 
     const result = aiApiResponse.choices[0].message.content;
@@ -46,18 +45,16 @@ const getAIResponse = async (message: any, extraMessage: string) => {
       messages: [
         {
           role: "system",
-          content:
-            `You are an assistant and a friend. Provide the shortest answer possible, be polite, and only mention the address if it's directly relevant to the conversation. if asked about weather or location near me use the address i provided` +
-            `(In case you need my location for any kind of service, it is ${extraMessage}. You can ignore it if it's not relevant.)`,
+          content: `You are an assistant and a friend. Provide concise and polite answers. Only mention the address if the user's location is directly relevant to the conversation, otherwise, avoid repeating it unnecessarily. If asked about weather or temparture give the closest answer`,
         },
-        {
-          role: "user",
-          content: message,
+        { 
+          role: "user", 
+          content: message + `(My location is ${extraMessage}. Please only mention it if it's necessary for the conversation.)` 
         },
       ],
-      max_tokens: 80,
+      max_tokens: 150,
     });
-
+    
     return response.data;
   } catch (error) {
     console.error("AI API Request Error:", error);
