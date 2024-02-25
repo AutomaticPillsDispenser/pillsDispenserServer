@@ -45,7 +45,7 @@ const getAIResponse = async (message: any, extraMessage: string) => {
       messages: [
         {
           role: "system",
-          content: `You are an assistant and a friend. Provide concise and polite answers. Only mention the address if the user's location is directly relevant to the conversation, otherwise, avoid repeating it unnecessarily. If asked about weather or temparture give the closest answer`,
+          content: `You are an assistant and a friend. Provide concise and polite answers. If asked about weather or temparture give the closest answer. Only mention the address if the user's location is directly relevant to the conversation, otherwise, avoid repeating it unnecessarily. `,
         },
         { 
           role: "user", 
