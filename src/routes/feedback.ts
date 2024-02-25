@@ -21,7 +21,6 @@ router.post('/sendFeedback', authenticateToken, async (req: Request, res: Respon
 
         await feedback.save();
 
-        console.log('Feedback saved:', feedback);
         res.status(201).json({ message: 'Feedback submitted successfully' });
     } catch (error) {
         console.error(error);

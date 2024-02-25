@@ -13,9 +13,7 @@ dotenv.config();
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { message, coords } = req.body;
-    console.log(coords);
-    let extraMessage =
-      ". Incase you need my location for any kind of service it is ";
+    let extraMessage = "";
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${coords[0]},${coords[1]}.json?access_token=pk.eyJ1IjoibmF0aXZlbWFwczMiLCJhIjoiY2xvNjRrd2ZyMGY4ZzJubzZrOXh1cGQ5MyJ9.fuZAyptTwY8Yy5cE5J8Ldw`;
     try {
       let response = await fetch(url);
@@ -23,6 +21,7 @@ router.post("/", async (req: Request, res: Response) => {
       extraMessage += json.features[0].place_name;
     } catch (e) {}
     // Your AI API request
+    console.log(extraMessage)
     const aiApiResponse = await getAIResponse(message, extraMessage);
 
     const result = aiApiResponse.choices[0].message.content;
@@ -47,9 +46,14 @@ const getAIResponse = async (message: any, extraMessage: string) => {
       messages: [
         {
           role: "system",
-          content: `You are an assistant gives the shortest answer as possible. No extra feedbacks.${extraMessage}`,
+          content:
+            `You are an assistant and a friend. Provide the shortest answer possible, be polite, and only mention the address if it's directly relevant to the conversation. if asked about weather or location near me use the address i provided` +
+            `(In case you need my location for any kind of service, it is ${extraMessage}. You can ignore it if it's not relevant.)`,
         },
-        { role: "user", content: message },
+        {
+          role: "user",
+          content: message,
+        },
       ],
       max_tokens: 80,
     });

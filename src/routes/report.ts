@@ -21,7 +21,6 @@ router.post('/sendReport', authenticateToken, async (req: Request, res: Response
 
         await feedback.save();
 
-        console.log('Report saved:', feedback);
         res.status(201).json({ message: 'Report submitted successfully' });
     } catch (error) {
         console.error(error);
