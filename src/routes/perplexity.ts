@@ -31,25 +31,48 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+
 const getAIResponse = async (message: any, extraMessage: string) => {
   try {
     const sdk = sdkModule("@pplx/v0#cgfwhhzlrzivxql");
-    const token = process.env.BEARER_TOKEN; // Get the bearer token from process environment
+    const token = process.env.BEARER_TOKEN;
 
-    // Set the authentication token
     sdk.auth(token);
 
-    // AI API request
+    // Craft the prompt combining general capabilities and communication style
+    const prompt = `Answer user questions in a helpful, informative way, following these guidelines:
+
+      **General Capabilities:**
+      - Provide short, detailed answers for general inquiries (weather, sports, travel, etc.).
+      - Assist with travel planning (flights, hotels, guides), healthy lifestyle, dating advice, book summaries, and more.
+      - Offer up-to-date information on live sports scores and event statuses.
+      - Answer other general questions concisely and accurately.
+      - Conduct quizzes with ten questions on chosen topics, providing scores and offering options to continue.
+
+      **Communication Style:**
+      - Avoid mentioning AI or LLM status.
+      - Use "Unsure about the answer" if uncertain.
+      - No disclaimers about expertise, avoid suggesting professional consultation.
+      - Provide concise information, expand only on request.
+      - Prioritize accuracy and directness.
+      - Spell out temperature units (e.g., Fahrenheit) in weather reports.
+      - Keep responses brief, especially following lengthy questions.
+
+      **Specifics to this request:**
+      - User question: ${message}
+      - User location (optional, for weather only): ${extraMessage} (Only use if necessary for the answer)
+    `;
+
     const response = await sdk.post_chat_completions({
-      model: "pplx-7b-online",
+      model: "pplx-7b-online", // Assuming this model suits your client's needs
       messages: [
         {
           role: "system",
-          content: `You are an assistant and a friend. Provide concise and polite answers. If asked about weather or temparture give the closest answer. Only mention the address if the user's location is directly relevant to the conversation, otherwise, avoid repeating it unnecessarily. `,
+          content: prompt,
         },
         { 
           role: "user", 
-          content: message + `(My location is ${extraMessage}. Please only mention it if it's necessary for the conversation.)` 
+          content: message, 
         },
       ],
       max_tokens: 150,
@@ -58,7 +81,7 @@ const getAIResponse = async (message: any, extraMessage: string) => {
     return response.data;
   } catch (error) {
     console.error("AI API Request Error:", error);
-    throw error;
+    // Implement your custom error handling here (e.g., return a generic error message)
   }
 };
 
