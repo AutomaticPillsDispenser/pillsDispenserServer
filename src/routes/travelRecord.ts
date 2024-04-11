@@ -10,6 +10,7 @@ TravelRecord.schema.index({ userId: 1, selectedLocation: 1 }, { unique: true });
 router.post('/storeRecord', authenticateToken, async (req: Request, res: Response) => {
     try {
         const { userId, selectedLocation } = req.body;
+
         // Create a new feedback instance
         const feedback = new TravelRecord({
             userId,
@@ -17,9 +18,8 @@ router.post('/storeRecord', authenticateToken, async (req: Request, res: Respons
             date: new Date().toISOString(), // You might want to use a library like moment.js for better date formatting
         });
 
-        await feedback.save();
+       await feedback.save();
 
-        console.log('Record saved:', feedback);
         res.status(201).json({ message: 'Feedback submitted successfully' });
     } catch (error) {
         console.error(error);

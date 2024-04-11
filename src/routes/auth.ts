@@ -255,9 +255,7 @@ router.post(
   async (req: AuthenticatedRequest, res: Response) => {
     try {
       const user: any = req.user;
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
-        expiresIn: "7d",
-      });
+      const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY);
       res.json({
         token,
         email: user.email,
@@ -308,9 +306,7 @@ router.post(
         user = await newUser.save();
       }
       // Generate JWT token
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
-        expiresIn: "7d",
-      });
+      const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY);
       try {
         await addToStrapi(email, username);
       } catch (e) {}
@@ -352,13 +348,9 @@ router.post("/loginWithApple", async (req: Request, res: Response) => {
       });
 
       user = await newUser.save();
-      token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
-        expiresIn: "7d",
-      });
+      token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY);
     } else {
-      token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
-        expiresIn: "7d",
-      });
+      token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY);
     }
     // Generate JWT token
     try {

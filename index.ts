@@ -17,6 +17,7 @@ app.listen(port, () => {
     console.log(`[Server]: Running at http://localhost:${port}`);
 });
 app.get("/", (req, res) => {
+    console.log("Hit")
     res.json({ message: 'Sid' })
 })
 
