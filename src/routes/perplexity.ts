@@ -13,6 +13,7 @@ dotenv.config();
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { message, coords } = req.body;
+    console.log(message)
     let extraMessage = "";
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${coords[0]},${coords[1]}.json?access_token=pk.eyJ1IjoibmF0aXZlbWFwczMiLCJhIjoiY2xvNjRrd2ZyMGY4ZzJubzZrOXh1cGQ5MyJ9.fuZAyptTwY8Yy5cE5J8Ldw`;
     try {
@@ -36,7 +37,7 @@ const getAIResponse = async (message: any, extraMessage: string) => {
   try {
     const sdk = sdkModule("@pplx/v0#cgfwhhzlrzivxql");
     const token = process.env.BEARER_TOKEN;
-
+console.log("First")
     sdk.auth(token);
 
     // Craft the prompt combining general capabilities and communication style
@@ -77,7 +78,7 @@ const getAIResponse = async (message: any, extraMessage: string) => {
       ],
       max_tokens: 150,
     });
-    
+    console.log(response)
     return response.data;
   } catch (error) {
     console.error("AI API Request Error:", error);
