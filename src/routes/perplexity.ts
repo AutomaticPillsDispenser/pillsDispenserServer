@@ -12,8 +12,8 @@ dotenv.config();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const { message, coords } = req.body;
-    console.log(message)
+    const { message, coords, prevConvo } = req.body;
+    console.log(prevConvo);
     let extraMessage = "";
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${coords[0]},${coords[1]}.json?access_token=pk.eyJ1IjoibmF0aXZlbWFwczMiLCJhIjoiY2xvNjRrd2ZyMGY4ZzJubzZrOXh1cGQ5MyJ9.fuZAyptTwY8Yy5cE5J8Ldw`;
     try {
@@ -22,7 +22,7 @@ router.post("/", async (req: Request, res: Response) => {
       extraMessage += json.features[0].place_name;
     } catch (e) {}
     // Your AI API request
-    const aiApiResponse = await getAIResponse(message, extraMessage);
+    const aiApiResponse = await getAIResponse(message, extraMessage, prevConvo);
 
     const result = aiApiResponse.choices[0].message.content;
     res.status(200).json({ response: result });
@@ -32,15 +32,26 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-
-const getAIResponse = async (message: any, extraMessage: string) => {
+const getAIResponse = async (
+  message: string,
+  extraMessage: string,
+  prevConvo: { question: string; answer: string }[]
+) => {
   try {
     const sdk = sdkModule("@pplx/v0#cgfwhhzlrzivxql");
     const token = process.env.BEARER_TOKEN;
-console.log("First")
+    console.log("First");
     sdk.auth(token);
 
-    // Craft the prompt combining general capabilities and communication style
+    // Constructing context from previous conversation, if necessary or asked by the user
+    let context = '';
+    if ((prevConvo && prevConvo.length > 0 && message === "current president of usa") || message.toLowerCase().includes("previous conversation")) {
+      prevConvo.forEach(convo => {
+        context += `User: ${convo.question}\nAI: ${convo.answer}\n`;
+      });
+    }
+
+    // Craft the prompt combining general capabilities, communication style, and context
     const prompt = `Answer user questions in a helpful, informative way, following these guidelines:
 
       **General Capabilities:**
@@ -59,6 +70,9 @@ console.log("First")
       - Spell out temperature units (e.g., Fahrenheit) in weather reports.
       - Keep responses brief, especially following lengthy questions.
 
+      **Conversation History:**
+      ${context}
+
       **Specifics to this request:**
       - User question: ${message}
       - User location (optional, for weather only): ${extraMessage} (Only use if necessary for the answer)
@@ -71,19 +85,19 @@ console.log("First")
           role: "system",
           content: prompt,
         },
-        { 
-          role: "user", 
-          content: message, 
+        {
+          role: "user",
+          content: message,
         },
       ],
       max_tokens: 150,
     });
-    console.log(response)
     return response.data;
   } catch (error) {
     console.error("AI API Request Error:", error);
     // Implement your custom error handling here (e.g., return a generic error message)
   }
 };
+
 
 export default router;
