@@ -2,10 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 dotenv.config()
 import feedbackRouter from './src/routes/feedback.js'
-import travelRecord from './src/routes/travelRecord.js'
-import perplexity from './src/routes/perplexity.js'
-import reportRecord from './src/routes/report.js'
-import authRouter from './src/routes/auth.js'
+
 import connectDatabase from './src/config/databaseConnection.js'
 const app = express();
 const port = process.env.PORT;
@@ -20,3 +17,5 @@ app.get("/", (req, res) => {
     console.log("Hit")
     res.json({ message: 'Sid' })
 })
+
+app.use('/feedback', feedbackRouter)

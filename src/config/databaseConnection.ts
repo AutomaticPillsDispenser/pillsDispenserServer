@@ -5,7 +5,7 @@ export default function connectDatabase() {
     const Password=process.env.PASSWORD
     console.log(Password)
     mongoose.connect(
-        `mongodb://siddharthaghimire:${Password}@ac-5fhopgk-shard-00-00.eydnij8.mongodb.net:27017,ac-5fhopgk-shard-00-01.eydnij8.mongodb.net:27017,ac-5fhopgk-shard-00-02.eydnij8.mongodb.net:27017/?ssl=true&replicaSet=atlas-mlqlwr-shard-0&authSource=admin&retryWrites=true&w=majority` )
+        `mongodb://sidghimire:RQSNuWDkSpIsd6vQ@ac-8itimwi-shard-00-00.7g57tkj.mongodb.net:27017,ac-8itimwi-shard-00-01.7g57tkj.mongodb.net:27017,ac-8itimwi-shard-00-02.7g57tkj.mongodb.net:27017/?ssl=true&replicaSet=atlas-1ew1kh-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0` )
         .then(() => {
             console.log('Connected to MongoDB');
         })
