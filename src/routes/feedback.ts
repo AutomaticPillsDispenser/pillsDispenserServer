@@ -4,6 +4,8 @@ import express, { Request, Response } from "express";
 const router = express.Router();
 import Feedback from "../models/feedback/feedback.js";
 
+router.use(express.json());
+
 router.post("/sendData", async (req: Request, res: Response) => {
   try {
     const { temperature, humidity, moisture } = req.body;
