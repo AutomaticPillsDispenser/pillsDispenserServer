@@ -22,4 +22,3 @@ app.get("/", (req, res) => {
     res.json({ message: 'Server Working correctly' })
 })
 
-app.use('/api', feedbackRouter)
