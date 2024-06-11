@@ -5,7 +5,7 @@ import feedbackRouter from './src/routes/feedback.js'
 
 import connectDatabase from './src/config/databaseConnection.js'
 const app = express();
-const port = process.env.PORT;
+const port = 3000;
 
 
 connectDatabase()
@@ -13,9 +13,13 @@ app.use(express.json({ limit: '10mb' })); // Set the limit to 10 megabytes (adju
 app.listen(port, () => {
     console.log(`[Server]: Running at http://localhost:${port}`);
 });
+
+
+
+
+
 app.get("/", (req, res) => {
-    console.log("Hit")
     res.json({ message: 'Sid' })
 })
 
-app.use('/feedback', feedbackRouter)
+app.use('/api', feedbackRouter)

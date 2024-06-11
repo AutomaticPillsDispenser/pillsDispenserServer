@@ -1,20 +1,16 @@
-import dotenv from "dotenv";
-dotenv.config();
 import express, { Request, Response } from "express";
+import Feedback from "../models/feedback/feedback";
 const router = express.Router();
-import Feedback from "../models/feedback/feedback.js";
 
 router.use(express.json());
 
 router.post("/sendData", async (req: Request, res: Response) => {
   try {
-    const { temperature, humidity, moisture } = req.body;
+    const { waterLevel } = req.body;
 
     // Create a new feedback instance
     const feedback = new Feedback({
-      temperature,
-      humidity,
-      moisture,
+      waterLevel,
       date: new Date().toISOString(), // You might want to use a library like moment.js for better date formatting
     });
 
@@ -27,7 +23,7 @@ router.post("/sendData", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/latestData", async (req: Request, res: Response) => {
+router.get("/getData", async (req: Request, res: Response) => {
     try {
       const latestFeedback = await Feedback.findOne().sort({ date: -1 });
   
