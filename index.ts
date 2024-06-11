@@ -33,17 +33,25 @@ app.get("/getData", async (req, res) => {
 
 app.post("/sendData", async (req, res) => {
   try {
-    const { waterLevel } = req.body;
+    const { waterLevel, message } = req.body;
 
-    // Create a new feedback instance
-    const feedback = new Feedback({
-      waterLevel,
-      date: new Date().toISOString(), // You might want to use a library like moment.js for better date formatting
-    });
+    const waterLevelValue = parseFloat(waterLevel);
+    console.log(message)
 
-    await feedback.save();
+    // Check if the extracted value is a number
+    if (!isNaN(waterLevelValue)) {
+      const feedback = new Feedback({
+        waterLevel:waterLevelValue,
+        date: new Date().toISOString(), // You might want to use a library like moment.js for better date formatting
+      });
 
-    res.status(201).json({ message: "Data submitted successfully" });
+      await feedback.save();
+      console.log(`Submitted Successfully`);
+
+      res.status(400).json({ message: "Data submitted Successfully" });
+    } else {
+      res.status(201).json({ message: "Invalid Entry" });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
