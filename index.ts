@@ -19,7 +19,7 @@ app.listen(port, () => {
 
 
 app.get("/", (req, res) => {
-    res.json({ message: 'Sid' })
+    res.json({ message: 'Server Working correctly' })
 })
 
 app.use('/api', feedbackRouter)
