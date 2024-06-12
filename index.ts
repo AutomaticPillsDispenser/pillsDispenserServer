@@ -35,25 +35,30 @@ app.post("/sendData", async (req, res) => {
   try {
     const { waterLevel, message } = req.body;
 
-    const waterLevelValue = parseFloat(waterLevel);
+    // Extract water level from the message using a regular expression
+    const waterLevelMatch = message.match(/(\d+(\.\d+)?)/);
+    const waterLevelValue = waterLevelMatch ? parseFloat(waterLevelMatch[0]) : NaN;
+
     console.log(message)
+    console.log(waterLevelValue)
 
     // Check if the extracted value is a number
     if (!isNaN(waterLevelValue)) {
       const feedback = new Feedback({
-        waterLevel:waterLevelValue,
+        waterLevel: waterLevelValue,
         date: new Date().toISOString(), // You might want to use a library like moment.js for better date formatting
       });
 
       await feedback.save();
       console.log(`Submitted Successfully`);
 
-      res.status(400).json({ message: "Data submitted Successfully" });
+      res.status(200).json({ message: "Data submitted Successfully" }); // Change status code to 200 for successful submission
     } else {
-      res.status(201).json({ message: "Invalid Entry" });
+      res.status(400).json({ message: "Invalid Entry" }); // Change status code to 400 for invalid entry
     }
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
 });
+
