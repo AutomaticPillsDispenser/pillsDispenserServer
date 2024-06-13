@@ -61,4 +61,35 @@ app.post("/sendData", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+app.get("/getSectionedData", async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find().sort({ date: -1 }).limit(25);
 
+    if (feedbacks.length === 0) {
+      return res.status(404).json({ message: "No data found" });
+    }
+
+    const sections = [[], [], [], [], []];
+    const sectionSize = Math.ceil(feedbacks.length / 5);
+
+    for (let i = 0; i < feedbacks.length; i++) {
+      sections[Math.floor(i / sectionSize)].push(feedbacks[i]);
+    }
+
+    const result = sections.map(section => {
+      const waterLevels = section.map(item => item.waterLevel);
+      const dates = section.map(item => new Date(item.date).getTime());
+      const avgTime = new Date(dates.reduce((a, b) => a + b, 0) / dates.length).toISOString();
+      return {
+        highest: Math.max(...waterLevels),
+        lowest: Math.min(...waterLevels),
+        avgTime: avgTime
+      };
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
